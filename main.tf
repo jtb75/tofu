@@ -5,6 +5,15 @@ terraform {
       version = "~> 5.0"
     }
   }
+
+  backend "s3" {
+    bucket         = "tofu-tfstate-370310087040"
+    key            = "tofu/terraform.tfstate"
+    region         = "us-east-2"
+    dynamodb_table = "tofu-tfstate-lock"
+    encrypt        = true
+    profile        = "dev"
+  }
 }
 
 provider "aws" {
