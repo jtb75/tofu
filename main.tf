@@ -219,3 +219,21 @@ resource "aws_s3_bucket_policy" "public_read" {
     ]
   })
 }
+
+# --- Logs Bucket ---
+
+resource "aws_s3_bucket" "logs" {
+  bucket = "${var.project}-logs-bucket"
+
+  tags = {
+    Name = "${var.project}-logs-bucket"
+  }
+}
+
+resource "aws_s3_bucket_versioning" "logs" {
+  bucket = aws_s3_bucket.logs.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
