@@ -12,13 +12,11 @@ terraform {
     region         = "us-east-2"
     dynamodb_table = "tofu-tfstate-lock"
     encrypt        = true
-    profile        = "dev"
   }
 }
 
 provider "aws" {
-  region  = var.region
-  profile = "dev"
+  region = var.region
 }
 
 # --- VPC ---
