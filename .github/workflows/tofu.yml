@@ -53,7 +53,7 @@ jobs:
       - name: Wiz IaC scan
         id: wiz
         if: steps.plan.outcome == 'success'
-        run: ./wizcli scan dir --client-id="$WIZ_CLIENT_ID" --client-secret="$WIZ_CLIENT_SECRET" plan.json --policy="tofu-pipeline-iac" || true
+        run: ./wizcli scan dir --client-id="$WIZ_CLIENT_ID" --client-secret="$WIZ_CLIENT_SECRET" plan.json --policy="tofu-pipeline-iac"
         env:
           WIZ_CLIENT_ID: ${{ secrets.WIZ_CLIENT_ID }}
           WIZ_CLIENT_SECRET: ${{ secrets.WIZ_CLIENT_SECRET }}
