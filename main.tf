@@ -222,11 +222,13 @@ resource "aws_s3_bucket_policy" "public_read" {
 
 # --- Logs Bucket ---
 
+data "aws_caller_identity" "current" {}
+
 resource "aws_s3_bucket" "logs" {
-  bucket = "${var.project}-logs-bucket"
+  bucket = "${var.project}-logs-${data.aws_caller_identity.current.account_id}"
 
   tags = {
-    Name = "${var.project}-logs-bucket"
+    Name = "${var.project}-logs-${data.aws_caller_identity.current.account_id}"
   }
 }
 
