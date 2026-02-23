@@ -40,6 +40,27 @@ jobs:
           exit ${PIPESTATUS[0]}
         continue-on-error: true
 
+      - name: Generate plan JSON
+        if: steps.plan.outcome == 'success'
+        run: tofu show -json tfplan > plan.json
+
+      - name: Install wizcli
+        if: steps.plan.outcome == 'success'
+        run: |
+          curl -Lo wizcli https://downloads.wiz.io/v1/wizcli/latest/wizcli-linux-amd64
+          chmod +x wizcli
+
+      - name: Wiz IaC scan
+        id: wiz
+        if: steps.plan.outcome == 'success'
+        run: |
+          ./wizcli auth --id "$WIZ_CLIENT_ID" --secret "$WIZ_CLIENT_SECRET"
+          ./wizcli iac scan --path plan.json --policy "tofu-pipeline-iac" --format human -o wiz_output.txt 2>&1 || true
+          cat wiz_output.txt
+        env:
+          WIZ_CLIENT_ID: ${{ secrets.WIZ_CLIENT_ID }}
+          WIZ_CLIENT_SECRET: ${{ secrets.WIZ_CLIENT_SECRET }}
+
       - name: Comment PR
         uses: actions/github-script@v7
         with:
